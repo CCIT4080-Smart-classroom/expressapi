@@ -26,21 +26,21 @@ var corsOptions = {
 };
 app.use(cors(corsOptions))
 
-app.post('/attendence/checkin', (req, res) => {
+app.post('/attendance/checkin', (req, res) => {
     const { student_id } = req.body;
-    pool.query(`INSERT INTO attendence (student_id) VALUES ('${student_id}')`, (err, rows) => {
+    pool.query(`INSERT INTO attendance (student_id) VALUES ('${student_id}')`, (err, rows) => {
         if (err) throw err;
         res.status(200).send("Success")
     });
 });
 
-app.get('/attendence/:student_id', (req, res) => {
+app.get('/attendance/:student_id', (req, res) => {
     const { student_id } =  req.params;
-    pool.query(`SELECT * FROM attendence WHERE student_id = '${student_id}'`, (err, result) => {
+    pool.query(`SELECT * FROM attendance WHERE student_id = '${student_id}'`, (err, result) => {
         if (err) throw err;
         var ts = [];
         for (var i = 0; i < result.length; i++) {
-            ts.push(result[i].attendence_ts);
+            ts.push(result[i].attendance_ts);
         }
         res.status(200).send(ts)
     });
