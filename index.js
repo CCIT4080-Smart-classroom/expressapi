@@ -2,21 +2,22 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const cheerio = require('cheerio');
+var setCookie = require('set-cookie-parser');
 const app = express();
 const PORT = 443;
 app.set('x-powered-by', false);
 
 
-mysql = require('mysql2');
-var pool = mysql.createPool({
-    host: "localhost",
-    user: "xoaincom_CCIT4080_admin",
-    password: "PmiW9z6cf%m[",
-    database: "xoaincom_CCIT4080",
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
+// mysql = require('mysql2');
+// var pool = mysql.createPool({
+//     host: "localhost",
+//     user: "xoaincom_CCIT4080_admin",
+//     password: "PmiW9z6cf%m[",
+//     database: "xoaincom_CCIT4080",
+//     waitForConnections: true,
+//     connectionLimit: 10,
+//     queueLimit: 0
+// });
 
 app.use(express.json());
 
@@ -30,7 +31,7 @@ app.post('/attendance/checkin', (req, res) => {
     const { student_id } = req.body;
     pool.query(`INSERT INTO attendance (student_id) VALUES ('${student_id}')`, (err, rows) => {
         if (err) throw err;
-        res.status(200).send("Success")
+        res.status(200).send()
     });
 });
 
@@ -53,6 +54,7 @@ app.get('/student/info', (req, res) => {
         "headers": {
           "cookie": req.headers.cookie
         },
+        maxRedirects: 0,
         "method": "GET"
     })
     .then((response) => {       
@@ -61,10 +63,13 @@ app.get('/student/info', (req, res) => {
         info["name"] = $("#DERIVED_SSTSNAV_PERSON_NAME").text()
         info["program"] = $("#win0divDERIVED_SSSACAD_HTMLAREA1 > div > span:nth-child(11)").text().split(" - ")[1]
         info["theme"] = $("#win0divDERIVED_SSSACAD_HTMLAREA1 > div > span:nth-child(15)").text().split(" - ")[1]
-        res.status(200).send(info) 
+        res.status(200).send({"data":info}) 
     })
     .catch((error) => {
-        console.log(error);
+        res.status(200).send({"error":{
+            "code": error.response.status,
+            "message": error.message
+        }});
     })
 });
 
@@ -74,6 +79,7 @@ app.get('/student/course', (req, res) => {
         "headers": {
           "cookie": req.headers.cookie
         },
+        maxRedirects: 0,
         "method": "GET"
     })
     .then((response) => {       
@@ -102,10 +108,86 @@ app.get('/student/course', (req, res) => {
         });
         // return coinArray;
         // console.log(courseArray)
-        res.status(200).send(courseArray) 
+        res.status(200).send({"data":courseArray}) 
     })
     .catch((error) => {
-        console.log(error);
+        res.status(200).send({"error":{
+            "code": error.response.status,
+            "message": error.message
+        }});
+    })
+});
+
+app.post('/score/login', (req, res) => {
+    const { username } = req.body;
+    const { password } = req.body;
+    axios.request("https://cas.hkuspace.hku.hk/cas/login", {
+        "method": "GET"
+    })
+    .then((response) => {   
+        const $ = cheerio.load(response.data);   
+        const lt = $("#credential > div.tpad10.h-margin > div:nth-child(4) > input[type=hidden]:nth-child(1)").attr('value')
+        return axios.request("https://cas.hkuspace.hku.hk/cas/login", {
+            headers: {
+                "cookie": response.headers['set-cookie'],
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            method: "POST",
+            params: {
+                "method":"POST"
+            },
+            data: `username=${username}&password=${password}&lt=${lt}&execution=e1s1&_eventId=submit&submit=Login`
+        })
+    })
+    .then((response) => {   
+        if (!response.headers['set-cookie']){
+            throw {
+                response: response,
+                message: "Wrong credentials"
+            };
+        }
+        return axios.request("https://cas.hkuspace.hku.hk/cas/login", {
+            headers: {
+                "cookie": response.headers['set-cookie']
+            },
+            method: "GET",
+            params: {
+                "method":"POST",
+                "service":"https://www.score.hku.hk/psp/csprd/EMPLOYEE/HRMS/h/?tab=DEFAULT&cas=SPACE_STUDENT&lookup=N&java=HKINFI012&msg=9&languageCd=ENG"
+            }
+        })
+    })
+    .then((response) => {
+        const $ = cheerio.load(response.data);   
+        // console.log($("body > form > div > textarea").text())
+        return axios.request("https://www.score.hku.hk/psp/csprd/EMPLOYEE/HRMS/h/", {
+            method: "POST",
+            params: {
+                "tab": "DEFAULT",
+                "cas": "SPACE_STUDENT",
+                "lookup": "N",
+                "java": "HKINFI012",
+                "msg": "9",
+                "languageCd": "ENG"
+            },
+            data: `ticket=${$("body > form > div > textarea").text()}`,
+            maxRedirects: 0,    
+            validateStatus: function(status) {
+                return status >= 200 && status < 303;
+            }
+        })
+    })
+    .then((response) => {
+        var cookies = setCookie.parse(response)
+        // console.log(cookies[5])
+        res.cookie(cookies[5].name, cookies[5].value, {encode: v => v})
+        res.send()
+    })
+    .catch((error) => {
+        res.status(200).send({"error":{
+            "code": error.response.status,
+            "message": error.message
+        }});
     })
 });
 
