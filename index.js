@@ -92,25 +92,30 @@ app.get('/student/course', (req, res) => {
             courseDetails["code"] = h.split(" - ")[0].replace(/\s/, "");
             courseDetails["name"] = h.split(" - ")[1];
             const components = []
-            var classDetails = {}
+            var cls_num, cls_type
             $(`tr[id^=trCLASS_MTG_VW\$${courseIndex}]`).each((classIndex, classElem) => {
-                var nbr = $("td:nth-child(1)", classElem).text().trim();
-                if (nbr){
-                    classDetails["number"] = $("td:nth-child(2)", classElem).text().trim();
-                    classDetails["type"] = $("td:nth-child(3)", classElem).text().trim();
+                const classDetails = {}
+                var td = $(classElem).children().map((i, elem) => {
+                    return $(elem).text().trim();
+                })
+                if (td[0]){
+                    cls_num = td[1];
+                    cls_type = td[2];
                 }
-                classDetails["time"] = $("td:nth-child(4)", classElem).text().trim();
-                classDetails["room"] = $("td:nth-child(5)", classElem).text().trim();
+                classDetails["number"] = cls_num;
+                classDetails["type"] = cls_type;
+                classDetails["time"] = td[3];
+                classDetails["room"] = td[4];
+                console.log(classDetails)
                 components.push(classDetails);
-            })
+            }) 
             courseDetails["components"] = components
             courseArray.push(courseDetails);
         });
-        // return coinArray;
-        // console.log(courseArray)
         res.status(200).send({"data":courseArray}) 
     })
     .catch((error) => {
+        console.log(error)
         res.status(200).send({"error":{
             "code": error.response.status,
             "message": error.message
