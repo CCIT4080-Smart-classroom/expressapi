@@ -156,78 +156,106 @@ Get the courses of a student from SCORE (`PS_TOKEN` required).
 ```javascript
 [
   "data": [
-    {
-      "code": "CCCH4003",
-      "name": "Advanced Chinese Language",
-      "components": [
-        {
-          "number": "CL53",
-          "type": "Lecture",
-          "time": "Tu 8:30AM - 11:30AM",
-          "room": "KEC503"
-        }
-      ]
-    },
-    {
-      "code": "CCEN4005",
-      "name": "EAP II",
-      "components": [
-        {
-          "number": "CL48",
-          "type": "Lecture",
-          "time": "Tu 1:00PM - 2:30PM",
-          "room": "KEC709"
-        },
-        {
-          "number": "CL48",
-          "type": "Lecture",
-          "time": "We 2:30PM - 4:00PM",
-          "room": "KEC708"
-        }
-      ]
-    },
-    {
-      "code": "CCIT4021",
-      "name": "Discrete Mathematics",
-      "components": [
-        {
-          "number": "CL06",
-          "type": "Lecture",
-          "time": "Tu 2:30PM - 5:30PM",
-          "room": "KEC505"
-        },
-        {
-          "number": "EXAM",
-          "type": "Exam",
-          "time": "TBA",
-          "room": "TBA"
-        }
-      ]
-    },
-    {
-      "code": "CCIT4033",
-      "name": "Intro to Database Systems",
-      "components": [
-        {
-          "number": "CL02",
-          "type": "Lecture",
-          "time": "Th 8:30AM - 11:30AM",
-          "room": "KEC910"
-        },
-        {
-          "number": "EXAM",
-          "type": "Exam",
-          "time": "TBA",
-          "room": "TBA"
-        }
-      ]
-    },
+		{
+			"code": "CCCH4003",
+			"name": "Advanced Chinese Language",
+			"components": [
+				{
+					"number": "CL53",
+					"type": "Lecture",
+					"weekday": 2,
+					"startTime": "8:30AM",
+					"endTime": "11:30AM",
+					"startDate": "2023-01-26",
+					"endDate": "2023-04-26",
+					"room": "KEC503"
+				}
+			]
+		},
+		{
+			"code": "CCEN4005",
+			"name": "EAP II",
+			"components": [
+				{
+					"number": "CL48",
+					"type": "Lecture",
+					"weekday": 2,
+					"startTime": "1:00PM",
+					"endTime": "2:30PM",
+					"startDate": "2023-01-26",
+					"endDate": "2023-04-26",
+					"room": "KEC709"
+				},
+				{
+					"number": "CL48",
+					"type": "Lecture",
+					"weekday": 3,
+					"startTime": "2:30PM",
+					"endTime": "4:00PM",
+					"startDate": "2023-01-26",
+					"endDate": "2023-04-26",
+					"room": "KEC708"
+				}
+			]
+		},
+		{
+			"code": "CCIT4021",
+			"name": "Discrete Mathematics",
+			"components": [
+				{
+					"number": "CL06",
+					"type": "Lecture",
+					"weekday": 2,
+					"startTime": "2:30PM",
+					"endTime": "5:30PM",
+					"startDate": "2023-01-26",
+					"endDate": "2023-04-26",
+					"room": "KEC505"
+				},
+				{
+					"number": "CE02",
+					"type": "Exam",
+					"weekday": 2,
+					"startTime": "2:30PM",
+					"endTime": "4:30PM",
+					"startDate": "2023-05-02",
+					"endDate": "2023-05-02",
+					"room": "KEC204"
+				}
+			]
+		},
+		{
+			"code": "CCIT4033",
+			"name": "Intro to Database Systems",
+			"components": [
+				{
+					"number": "CL02",
+					"type": "Lecture",
+					"weekday": 4,
+					"startTime": "8:30AM",
+					"endTime": "11:30AM",
+					"startDate": "2023-01-26",
+					"endDate": "2023-04-26",
+					"room": "KEC910"
+				},
+				{
+					"number": "CE01",
+					"type": "Exam",
+					"weekday": 3,
+					"startTime": "2:30PM",
+					"endTime": "4:30PM",
+					"startDate": "2023-05-10",
+					"endDate": "2023-05-10",
+					"room": "KECHALL"
+				}
+			]
+		},
     ...
   ]
 ]
 ```
 
-### POST /student/assignment
+### GET /student/assignment
 Get the pending assignment(s) of a student from SOUL by sending credentials.
 
 
