@@ -78,7 +78,7 @@ exports.saveRate = (async (req, res) => {
         // Return a success response
         res.status(200).send(({
             "data": {
-                "message": "Attendance recorded successfully"
+                "message": "Attendance rate save successfully"
             }
         }));
     } catch (err) {

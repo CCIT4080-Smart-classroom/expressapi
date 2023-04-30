@@ -1,16 +1,16 @@
 const express = require("express");
-const { studentCourse, studentAssignment } = require("../controllers/student");
+const { studentInfo, studentCourse, studentAssignment } = require("../controllers/student");
 const router = express.Router()
 
-// router.get('/student/info', (req, res) => {
-    
-// });
+router.get('/info', (req, res) => {
+    studentInfo(req, res);
+});
 
 router.get('/course', (req, res) => {
     studentCourse(req, res);
 });
 
-router.post('/assignment', (req, res) => {
+router.get('/assignment', (req, res) => {
     studentAssignment(req, res);
 });
 

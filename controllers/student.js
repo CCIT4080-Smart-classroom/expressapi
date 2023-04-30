@@ -1,30 +1,31 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-// const studentInfo = ((req, res) => {
-//     const info = {}
-//     axios.request("https://www.score.hku.hk/psc/csprd/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.SSS_MY_ACAD.GBL", {
-//         "headers": {
-//           "cookie": req.headers.cookie
-//         },
-//         maxRedirects: 0,
-//         "method": "GET"
-//     })
-//     .then((response) => {       
-//         const html_data = response.data;
-//         const $ = cheerio.load(html_data);
-//         info["name"] = $("#DERIVED_SSTSNAV_PERSON_NAME").text()
-//         info["program"] = $("#win0divDERIVED_SSSACAD_HTMLAREA1 > div > span:nth-child(11)").text().split(" - ")[1]
-//         info["theme"] = $("#win0divDERIVED_SSSACAD_HTMLAREA1 > div > span:nth-child(15)").text().split(" - ")[1]
-//         res.status(200).send({"data":info}) 
-//     })
-//     .catch((error) => {
-//         res.status(200).send({"error":{
-//             "code": error.response.status,
-//             "message": error.message
-//         }});
-//     })
-// });
+exports.studentInfo = ((req, res) => {
+    const info = {}
+    axios.request("https://www.score.hku.hk/psc/csprd/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.SSS_MY_ACAD.GBL", {
+        "headers": {
+          "cookie": req.headers.cookie
+        },
+        maxRedirects: 0,
+        "method": "GET"
+    })
+    .then((response) => {       
+        const html_data = response.data;
+        const $ = cheerio.load(html_data);
+        info["name"] = $("#DERIVED_SSTSNAV_PERSON_NAME").text()
+        info["program"] = $("#win0divDERIVED_SSSACAD_HTMLAREA1 > div > span:nth-child(11)").text().split(" - ")[1]
+        info["theme"] = $("#win0divDERIVED_SSSACAD_HTMLAREA1 > div > span:nth-child(15)").text().split(" - ")[1]
+        res.status(200).send({"data":info}) 
+    })
+    .catch((error) => {
+        res.status(200).send({"error":{
+            "code": error.response.status,
+            "message": error.message
+        }});
+    })
+});
+
 const weekdayMap = {
     Su: 0,
     Mo: 1,
