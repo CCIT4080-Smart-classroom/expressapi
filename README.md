@@ -2,7 +2,7 @@
 An Express REST API for the Smart Classroom System.
 
 ## Endpoints
-The root url of the API is currently [https://api.tylerl.cyou/](https://api.ccit4080.tylerl.cyou/). `student_id` is the student ID.
+The root url of the API is currently [https://api.tylerl.cyou/](https://api.tylerl.cyou/). `student_id` is the student ID.  `lecturer_id` is the lecturer ID.
 
 ### POST /attendance/checkin
 Record student attendacne.
@@ -40,6 +40,90 @@ Get all attendance record of `student_id`.
   "2023-01-29T09:09:49.000Z",
   "2023-01-29T09:10:02.000Z"
 ]
+```
+
+### POST /attendance/rate
+Save attendance rate of `student_id`.
+
+Payload:
+```javascript
+{
+	"attendance_data": [
+		{
+			"attendance_rate": 0,
+			"course_code": "CCCH4003"
+		},
+		{
+			"attendance_rate": 7,
+			"course_code": "CCEN4005"
+		},
+		{
+			"attendance_rate": 7,
+			"course_code": "CCIT4021"
+		},
+		{
+			"attendance_rate": 7,
+			"course_code": "CCIT4033"
+		},
+		{
+			"attendance_rate": 0,
+			"course_code": "CCIT4079"
+		},
+		{
+			"attendance_rate": 0,
+			"course_code": "CCIT4080B"
+		}
+	],
+	"student_id": "20182960"
+}
+```
+
+### GET /lecturer/`lecturer_id`
+Get all attendance rate of students of `lecturer_id`.
+
+```javascript
+{
+	"data": [
+		{
+			"c_code": "CCIT4021CL06",
+			"students": [
+				{
+					"student_id": 20000001,
+					"attendance_rate": 70
+				},
+				{
+					"student_id": 20000003,
+					"attendance_rate": 50
+				},
+				{
+					"student_id": 20182960,
+					"attendance_rate": 7
+				}
+			]
+		},
+		{
+			"c_code": "CCIT4033CL02",
+			"students": [
+				{
+					"student_id": 20000001,
+					"attendance_rate": 80
+				},
+				{
+					"student_id": 20000002,
+					"attendance_rate": 40
+				},
+				{
+					"student_id": 20000003,
+					"attendance_rate": 90
+				},
+				{
+					"student_id": 20182960,
+					"attendance_rate": 7
+				}
+			]
+		}
+	]
+}
 ```
 
 ### POST /auth/score
@@ -142,4 +226,59 @@ Get the courses of a student from SCORE (`PS_TOKEN` required).
     ...
   ]
 ]
+```
+
+### GET /student/assignment
+Get the pending assignment(s) of a student from SOUL by sending credentials.
+
+
+Payload:
+```javascript
+{
+  "username":"20000000",
+  "password":"12345678"
+}
+```
+
+```javascript
+{
+	"data": [
+		{
+			"name": "書面專題報告（呈交） is due",
+			"end_time": 1681833540,
+			"course_name": "Advanced Chinese Language / 高級中國語文",
+			"url": "https://soul2.hkuspace.hku.hk/mod/assign/view.php?id=1766501&action=editsubmission"
+		},
+		{
+			"name": "書面專題報告（相似程度檢查） - Part 1",
+			"end_time": 1681833540,
+			"course_name": "Advanced Chinese Language / 高級中國語文",
+			"url": "https://soul2.hkuspace.hku.hk/mod/turnitintooltwo/view.php?id=1766502"
+		},
+		{
+			"name": "專題報告互評表（呈交） is due",
+			"end_time": 1682092740,
+			"course_name": "Advanced Chinese Language / 高級中國語文",
+			"url": "https://soul2.hkuspace.hku.hk/mod/assign/view.php?id=1766503&action=editsubmission"
+		},
+		{
+			"name": "Assignment (20% of course total, individual work) - due 25th April 2023, 5:30pm is due",
+			"end_time": 1682415000,
+			"course_name": "Big Data Applications and Analytics / 大數據應用及分析",
+			"url": "https://soul2.hkuspace.hku.hk/mod/assign/view.php?id=1840920&action=editsubmission"
+		},
+		{
+			"name": "[Submission] Assignment 02 is due",
+			"end_time": 1682501400,
+			"course_name": "Discrete Mathematics / 電腦數學",
+			"url": "https://soul2.hkuspace.hku.hk/mod/assign/view.php?id=1851176&action=editsubmission"
+		},
+		{
+			"name": "Final Report [Min: 2000 words][pdf] + A2 poster [pdf][Due on 30 Apr 2023 Sun 23:59][20%] is due",
+			"end_time": 1682870340,
+			"course_name": "Project on Knowledge Products Development / 工程專題項目",
+			"url": "https://soul2.hkuspace.hku.hk/mod/assign/view.php?id=1809564&action=editsubmission"
+		}
+	]
+}
 ```

@@ -9,6 +9,7 @@ const app = express();
 const PORT = 443;
 
 const studentRoutes = require('./routes/student');
+const lecturerRoutes = require('./routes/lecturer');
 const authRoutes = require('./routes/auth');
 const attendanceRoutes = require('./routes/attendance');
 
@@ -23,6 +24,7 @@ var corsOptions = {
 app.use(cors(corsOptions))
 
 app.use('/student', studentRoutes)
+app.use('/lecturer', lecturerRoutes)
 app.use('/auth', authRoutes);
 app.use('/attendance', attendanceRoutes);
 // app.use(function(request, response, next) {

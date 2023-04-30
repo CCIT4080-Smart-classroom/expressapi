@@ -10,4 +10,8 @@ router.get('/:student_id', (req, res) => {
     attendance.getAttendance(req, res);
 });
 
+router.post('/rate', (req, res) => {
+    attendance.saveRate(req, res);
+});
+
 module.exports = router

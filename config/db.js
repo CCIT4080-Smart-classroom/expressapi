@@ -1,13 +1,19 @@
-const mysql = require('mysql2');
+const sqlconfig = {
+    user: "tyler",
+    password: 'pr9b3ic4?HIswI8+_r3_',
+    server: "tylerjlcy.database.windows.net",
+    port: 1433,
+    database: 'db', // better stored in an app setting such as process.env.DB_NAME
+    authentication: {
+        type: 'default'
+    },
+    options: {
+        encrypt: true
+    }
+}
 
-var pool = mysql.createPool({
-    host: "localhost",
-    user: "xroostco_admin",
-    password: process.env.MYSQL_PASSWORD,
-    database: "xroostco_db",
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
 
-module.exports = pool
+// const conn = new sql.connect(config);
+
+
+module.exports = sqlconfig

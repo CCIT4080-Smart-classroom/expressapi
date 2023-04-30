@@ -25,6 +25,15 @@ const cheerio = require('cheerio');
 //         }});
 //     })
 // });
+const weekdayMap = {
+    Su: 0,
+    Mo: 1,
+    Tu: 2,
+    We: 3,
+    Th: 4,
+    Fr: 5,
+    Sa: 6,
+  };
 
 exports.studentCourse = ((req, res) => {
     const courseArray = [];
@@ -57,9 +66,22 @@ exports.studentCourse = ((req, res) => {
                 }
                 classDetails["number"] = cls_num;
                 classDetails["type"] = cls_type;
-                classDetails["time"] = td[3];
+                let timedetails = td[3];
+                if (timedetails.includes("-")) {
+                    // let temp, weekday, startTime, endTime, startDate, endDate;
+                    let [temp, endTime] = timedetails.split(" - ");
+                    let [weekday, startTime] = temp.split(" ");
+                    classDetails["weekday"] = weekdayMap[weekday]
+                    classDetails["startTime"] = startTime;
+                    classDetails["endTime"] = endTime;
+                    let [startDate, endDate] = td[6].split(" - ");
+                    var [day, month, year] = startDate.split('/');
+                    classDetails["startDate"] = `${year}-${month}-${day}`;
+                    var [day, month, year] = endDate.split('/');
+                    classDetails["endDate"] = `${year}-${month}-${day}`;
+                }
                 classDetails["room"] = td[4];
-                console.log(classDetails)
+                // console.log(classDetails)
                 components.push(classDetails);
             }) 
             courseDetails["components"] = components
