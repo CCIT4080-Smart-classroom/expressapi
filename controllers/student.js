@@ -100,8 +100,7 @@ exports.studentCourse = ((req, res) => {
 });
 
 exports.studentAssignment = ((req, res) => {
-    const { username } = req.body;
-    const { password } = req.body;
+    const { username, password } = req.query;
     var FederationRedirectUrl;
     var MoodleSessionSOUL2;
     axios.request("https://soul2.hkuspace.hku.hk/auth/oidc/", {
