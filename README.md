@@ -137,7 +137,6 @@ Payload:
 }
 ```
 
-
 ### GET /student/info
 Get the information about a student from SCORE (`PS_TOKEN` required).
 
@@ -228,7 +227,7 @@ Get the courses of a student from SCORE (`PS_TOKEN` required).
 ]
 ```
 
-### GET /student/assignment
+### POST /student/assignment
 Get the pending assignment(s) of a student from SOUL by sending credentials.
 
 
